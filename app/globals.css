@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+/* border-gray-300 */
+
+/* debugging border classes */
+@layer components {
+  .bred {
+    @apply border-2 border-red-500
+  }
+  .bgreen {
+    @apply border-2 border-green-500
+  }
+  .bblue {
+    @apply border-2 border-blue-500
+  }
+  .byellow {
+    @apply border-2 border-yellow-500
+  }
+  .bpurple {
+    @apply border-2 border-purple-500
+  }
+  .bblack {
+    @apply border-2 border-black
+  }
+  .bwhite {
+    @apply border-2 border-white
+  }
+}
+
+.page {
+  @apply border bred bg-white shadow-md p-4 my-4;
+
+  width: 793.7px;
+  height: 1122px;
+  box-sizing: border-box;
+  overflow: hidden;
+}

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useMemo, useState, useEffect } from "react";
+import React, { useCallback, useMemo, useState, useEffect, useRef } from "react";
 import { Slate, Editable, withReact } from "slate-react";
 import { createEditor, Descendant, BaseEditor } from "slate";
 import { withHistory, HistoryEditor } from "slate-history";
@@ -27,6 +27,8 @@ const initialValue: CustomElement[] = [
 ];
 
 const RichTextEditor: React.FC = () => {
+
+
   const [value, setValue] = useState<Descendant[]>(initialValue);
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
 
@@ -98,7 +100,7 @@ const RichTextEditor: React.FC = () => {
                 boxSizing: "border-box",
               }}
             >
-              <Editable
+              <Editable 
                 id={`editor-${index}`} // Unique ID for each editor instance
                 placeholder="Start typing here..."
                 className="outline-none"

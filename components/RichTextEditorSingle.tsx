@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useMemo, useState, useEffect } from "react";
+import React, { useCallback, useMemo, useState, useEffect, useRef } from "react";
 import { Slate, Editable, withReact } from "slate-react";
 import { createEditor, Descendant, BaseEditor } from "slate";
 import { withHistory, HistoryEditor } from "slate-history";
@@ -27,6 +27,49 @@ const initialValue: CustomElement[] = [
 ];
 
 const RichTextEditorSingle: React.FC = () => {
+
+   // Create a ref to the div
+   const divRef = useRef<HTMLDivElement>(null);
+
+   // Function to select the text inside the div
+   const selectText = () => {
+     if (divRef.current) {
+       const range = document.createRange();
+       range.selectNodeContents(divRef.current);
+       const selection = window.getSelection();
+       selection?.removeAllRanges();
+       selection?.addRange(range);
+     }
+   };
+
+
+   const printContent = () => {
+    if (divRef.current) {
+      const printWindow = window.open('', '_blank');
+      printWindow?.document.write(`
+        <html>
+          <head>
+            <title>Print</title>
+            <style>
+              body {
+                font-family: Arial, sans-serif;
+                padding: 20px;
+              }
+            </style>
+          </head>
+          <body>
+            ${divRef.current.innerHTML}
+          </body>
+        </html>
+      `);
+      printWindow?.document.close();
+      printWindow?.print();
+    }
+  };
+ 
+   
+
+
   const [value, setValue] = useState<Descendant[]>(initialValue);
   const editor = useMemo(() => withHistory(withReact(createEditor())), []);
 
@@ -78,6 +121,10 @@ const RichTextEditorSingle: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center">
+
+      <button onClick={selectText}>Select All Content Text</button>
+      <button onClick={() => { selectText(); printContent(); }}>Select and Print</button>
+      
       {pages.map((pageContent, index) => (
         <div
           key={index} // Ensure this key is unique
@@ -107,7 +154,7 @@ const RichTextEditorSingle: React.FC = () => {
                 boxSizing: "border-box",
               }}
             >
-              <Editable
+              <Editable ref={divRef}
                 id={`editor-${index}`} // Unique ID for each editor instance
                 placeholder="Start typing here..."
                 className="outline-none"
